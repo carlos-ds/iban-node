@@ -1,0 +1,30 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Belgian IBAN generator</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="./css/normalize.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="./css/main.css" media="screen" />  
+    </head>
+    <body>
+        <!--[if lt IE 8]>
+            <p>You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        <div id="main">
+            <span id="iban"></span>
+            <a id="generate">Generate IBAN</a>
+
+            <h2>Last 5 generated IBAN's</h2>
+            <ol id="list">
+            </ol>
+        </div>
+
+        <script src="./js/jquery-3.4.0.min.js"></script>
+        <script src="./js/bankcodes.js"></script>
+        <script src="./js/iban.js"></script>
+        <script src="./js/main.js"></script>
+    </body>
+</html>
