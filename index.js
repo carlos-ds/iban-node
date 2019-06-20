@@ -1,6 +1,8 @@
 const iban = require('./js/iban.js');
 const mysql = require('mysql');
 const express = require('express');
+const ejs = require('ejs');
+
 const app = express();
 const port = 3000;
 
@@ -8,7 +10,7 @@ const pool = mysql.createPool({
     connectionLimit: 100,
     host: 'localhost',
     user: 'root',
-    password: 'nintendo64',
+    password: process.argv[2],
     database: 'personal',
     debug: false
   });
