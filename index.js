@@ -2,9 +2,14 @@ const iban = require('./js/iban.js');
 const mysql = require('mysql');
 const express = require('express');
 const ejs = require('ejs');
+const path = require('path');
 
 const app = express();
 const port = 3000;
+
+app.set('view engine', 'ejs');
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 const pool = mysql.createPool({
     connectionLimit: 100,
@@ -16,18 +21,18 @@ const pool = mysql.createPool({
   });
 
 app.get('/', function (req, res) {
-    pool.query('SELECT * FROM iban', function(err, results, fields){
+    pool.query('SELECT * FROM iban', function(err, result, fields){
         if(err) {
             return res.json({'error': true, 'message': err});
         }
-
-        res.json(results);
+        
+        res.render('index', { data: result });
     });
 });
 
 app.get('/create', function(req, res) {
     let newIban = iban.generate();
-    pool.query(`INSERT INTO iban (iban) VALUES (?)`, [newIban], function(err, results, fields){
+    pool.query(`INSERT INTO iban (iban) VALUES (?)`, [newIban], function(err, result, fields){
         if(err) {
             return res.json({'error': true, 'message': err});
         }

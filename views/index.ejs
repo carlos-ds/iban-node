@@ -1,0 +1,15 @@
+    <% include ./partials/header.ejs %>
+    
+    <div id="main">
+        <span id="iban"></span>
+        <a id="generate" href="/create">Generate IBAN</a>
+
+        <h2>Last 5 generated IBAN's</h2>
+        <ol id="list">
+            <% data.forEach(function(data) { %>
+                <li><%= data.iban %></li>
+            <% }); %>
+        </ol>
+    </div>
+
+    <% include ./partials/footer.ejs %>
