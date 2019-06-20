@@ -27,6 +27,10 @@ h2 {
     list-style-position: inside;
 }
 
+#list li:first-of-type {
+    font-weight: bold;
+}
+
 #list li {
     padding: 1rem 0;
     font-size: 1.3rem;

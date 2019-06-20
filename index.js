@@ -21,11 +21,11 @@ const pool = mysql.createPool({
   });
 
 app.get('/', function (req, res) {
-    pool.query('SELECT * FROM iban', function(err, result, fields){
+    pool.query('SELECT * FROM iban ORDER BY id desc LIMIT 10', function(err, result, fields){
         if(err) {
             return res.json({'error': true, 'message': err});
         }
-        
+
         res.render('index', { data: result });
     });
 });
