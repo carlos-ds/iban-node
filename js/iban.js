@@ -1,6 +1,7 @@
+// Import array of bank codes to exclude
 const bankCodes = require('./bankcodes');
 
-// Extend array with contain method
+// Extend array with contain method to exclude free/invalid bank codes
 // https://stackoverflow.com/questions/12623272/how-to-check-if-a-string-array-contains-one-string-in-javascript
 Array.prototype.contains = function(element){
     return this.indexOf(element) > -1;
