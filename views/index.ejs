@@ -1,13 +1,13 @@
     <% include ./partials/header.ejs %>
     
     <div id="main">
-        <span id="iban"><%= data[0].iban %></span>
+        <span id="iban"><%= data[0].value %></span>
         <a id="generate" href="/create">Generate IBAN</a>
 
         <h2>Last 10 generated IBAN's</h2>
         <ol id="list">
             <% data.forEach(function(data) { %>
-                <li><%= data.iban %></li>
+                <li><%= data.value %></li>
             <% }); %>
         </ol>
     </div>
