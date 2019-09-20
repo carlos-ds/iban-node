@@ -1,21 +1,22 @@
 {
-  "name": "iban-node",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "dependencies": {
-    "ejs": "^2.6.2",
-    "express": "^4.17.1",
-    "mysql": "^2.17.1",
-    "normalize.css": "^8.0.1"
-  },
-  "devDependencies": {
-    "jest": "^24.8.0"
-  },
-  "scripts": {
-    "test": "jest"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+	"name": "iban-node",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"dependencies": {
+		"ejs": "^2.6.2",
+		"express": "^4.17.1",
+		"mysql": "^2.17.1",
+		"normalize.css": "^8.0.1"
+	},
+	"devDependencies": {
+		"jest": "^24.8.0",
+		"env-cmd": "^10.0.1"
+	},
+	"scripts": {
+		"test": "jest"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC"
 }
