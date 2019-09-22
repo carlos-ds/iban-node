@@ -1,15 +1,23 @@
-    <% include ./partials/header.ejs %>
-    
-    <div id="main">
-        <span id="iban"><%= data[0].value %></span>
-        <a id="generate" href="/create">Generate IBAN</a>
+<% include ./partials/header.ejs %>
 
-        <h2>Last 10 generated IBAN's</h2>
-        <ol id="list">
-            <% data.forEach(function(data) { %>
-                <li><%= data.value %></li>
-            <% }); %>
-        </ol>
-    </div>
+<div id="main">
+    <% if (data.length > 0) { %>
+    <span id="iban"><%= data[0].value %></span>
+    <% } else { %>
+    <p>Something went wrong while retrieving the data or the database might be empty ...</p>
+    <% } %>
 
-    <% include ./partials/footer.ejs %>
+    <a id="generate" href="/create">Generate IBAN</a>
+
+    <% if (data.length > 0) { %>
+    <h2>Last 10 generated IBAN's</h2>
+    <ol id="list">
+        <% data.forEach(function(data) { %>
+        <li><%= data.value %></li>
+        <% }); %>
+    </ol>
+    <% } %>
+</div>
+
+
+<% include ./partials/footer.ejs %>
