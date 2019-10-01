@@ -7,7 +7,9 @@
     <p>Something went wrong while retrieving the data or the database might be empty ...</p>
     <% } %>
 
-    <a id="generate" href="/create">Generate IBAN</a>
+    <a class="button" id="btn-generate" href="/create">Generate IBAN</a>
+    <a class="button" id="btn-copy">Copy to clipboard</a>
+
 
     <% if (data.length > 0) { %>
     <h2>Last 10 generated IBAN's</h2>

@@ -37,7 +37,7 @@ h2 {
 }
 
 /* BUTTON */
-#generate {
+.button {
     display: inline-block;
     padding: 0.46em 1.6em;
     border: 0.1em solid #000000;
@@ -46,8 +46,19 @@ h2 {
     box-sizing: border-box;
     text-decoration: none;
     font-weight: 300;
-    color: #000000;
     text-shadow: 0 0.04em 0.04em rgba(0,0,0,0.35);
-    background-color: #FFFFFF;
     text-align: center;
 }
+
+#btn-generate {
+    color: #000000;
+    background-color: #FFFFFF;
+}
+
+#btn-copy {
+    color: #FFFFFF;
+    background-color: #32CD32;
+    cursor: pointer;
+}
+
+
