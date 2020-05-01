@@ -1,24 +1,37 @@
 <% include ./partials/header.ejs %>
 
 <div id="main">
-    <% if (data.length > 0) { %>
-    <span id="iban"><%= data[0].value %></span>
-    <% } else { %>
-    <p>Something went wrong while retrieving the data or the database might be empty ...</p>
-    <% } %>
+    <div id="generate">
+        <h2>Generate</h2>
+        <% if (data.length > 0) { %>
+        <span id="iban"><%= data[0].value %></span>
+        <% } else { %>
+        <p>Something went wrong while retrieving the data or the database might be empty ...</p>
+        <% } %>
 
-    <a class="button" id="btn-generate" href="/create">Generate IBAN</a>
-    <a class="button" id="btn-copy">Copy to clipboard</a>
+        <a class="button" id="btn-generate" href="/create">Generate IBAN</a>
+        <a class="button" id="btn-copy">Copy to clipboard</a>
 
 
-    <% if (data.length > 0) { %>
-    <h2>Last 10 generated IBAN's</h2>
-    <ol id="list">
-        <% data.forEach(function(data) { %>
-        <li><%= data.value %></li>
-        <% }); %>
-    </ol>
-    <% } %>
+        <% if (data.length > 0) { %>
+        <p><strong>Last 10 generated IBAN's:</strong></p>
+        <ol id="list">
+            <% data.forEach(function(data) { %>
+            <li><%= data.value %></li>
+            <% }); %>
+        </ol>
+        <% } %>
+    </div>
+
+    <div id="validate" style="padding-bottom: 50px;">
+        <h2>Validate</h2>
+        <p>Validate a Belgian bank account number. The number must be in "BEXX XXXX XXXX XXXX" format to pass the
+            tests."</p>
+        <form action="/validate" method="POST" name="validate" autocomplete="off">
+            <input type="text" name="iban" placeholder="BEXX XXXX XXXX XXXX">
+            <input type="submit" value="submit"></input>
+        </form>
+    </div>
 </div>
 
 
