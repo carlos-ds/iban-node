@@ -1,5 +1,6 @@
-// Import array of bank codes to exclude
-const bankCodes = require('./bankcodes');
+const addBbanCheckDigits = require("./helpers/create").addBbanCheckDigits;
+const validationHelpers = require("./helpers/validate");
+const bankCodes = require('./helpers/bankcodes');
 
 // Extend array with contain method to exclude free/invalid bank codes
 // https://stackoverflow.com/questions/12623272/how-to-check-if-a-string-array-contains-one-string-in-javascript
@@ -36,20 +37,17 @@ function generateIban() {
     return `BE${checkDigitsWithLeadingZeroes} ${bbanString.substr(0, 4)} ${bbanString.substr(4, 4)} ${bbanString.substr(8, 4)}`;
 }
 
-module.exports = { generate: generateIban };
-
-// Helper function to add 2 check digits to a BBAN
-function addBbanCheckDigits(bban) {
-    let bbanInt = BigInt(bban);
-    let checkDigits = bbanInt % BigInt(97);
-
-    if (bbanInt % BigInt(97) === 0) {
-        return generateIban();
-    } else if (bbanInt % BigInt(97) < 10) {
-        // Return the result as a string with leading zero
-        return bban + "0" + checkDigits;
-    } else {
-        // Return the result as a string
-        return bban + checkDigits;
+function validate(iban) {
+    let sanitizedIban = iban.trim().replace(/\s/g, "");
+    console.log(sanitizedIban);
+    let validation = {
+        iban: sanitizedIban,
+        has16Characters: validationHelpers.has16Characters(sanitizedIban),
+        startsWithBelgianPrefix: validationHelpers.startsWithBelgianPrefix(sanitizedIban),
+        endsWithNumbers: validationHelpers.endsWithNumbers(sanitizedIban),
+        hasValidBban: validationHelpers.hasValidBban(sanitizedIban)
     }
+    return validation;
 }
+
+module.exports = { generateIban, validate };
