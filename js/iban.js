@@ -1,6 +1,7 @@
 const addBbanCheckDigits = require("./helpers/create").addBbanCheckDigits;
 const validationHelpers = require("./helpers/validate");
 const bankCodes = require('./helpers/bankcodes');
+const bigInt = require("big-integer");
 
 // Extend array with contain method to exclude free/invalid bank codes
 // https://stackoverflow.com/questions/12623272/how-to-check-if-a-string-array-contains-one-string-in-javascript
@@ -21,16 +22,16 @@ function generateIban() {
     }
 
     // Add 2 BBAN check digits to the first ten digits, add the country code in latin alphabet, add "00" and perform modulo 97
-    const bbanString = BigInt(addBbanCheckDigits(firstTenDigits)).toString();
-    const bbanWithCountryCodeAndZeroes = BigInt(bbanString + "111400");
-    const checkMod97 = bbanWithCountryCodeAndZeroes % BigInt(97);
+    const bbanString = bigInt(addBbanCheckDigits(firstTenDigits), 10).toString();
+    const bbanWithCountryCodeAndZeroes = bigInt((bbanString + "111400"), 10);
+    const checkMod97 = bbanWithCountryCodeAndZeroes % bigInt(97, 10);
 
     if (checkMod97 === 0) {
         return generateIban();
     }
 
     // Calculate IBAN check digits (BEXX ...) and add a zero if necessary
-    const ibanCheckDigits = (BigInt(98) - checkMod97).toString();
+    const ibanCheckDigits = (bigInt(98, 10) - checkMod97).toString();
     const checkDigitsWithLeadingZeroes = ("0").repeat(2 - ibanCheckDigits.toString().length) + ibanCheckDigits;
 
     // Return the IBAN number in BEXX XXXX XXXX XXXX format
@@ -39,13 +40,13 @@ function generateIban() {
 
 function validate(iban) {
     let sanitizedIban = iban.trim().replace(/\s/g, "");
-    console.log(sanitizedIban);
     let validation = {
-        iban: sanitizedIban,
+        iban: iban,
         has16Characters: validationHelpers.has16Characters(sanitizedIban),
         startsWithBelgianPrefix: validationHelpers.startsWithBelgianPrefix(sanitizedIban),
         endsWithNumbers: validationHelpers.endsWithNumbers(sanitizedIban),
-        hasValidBban: validationHelpers.hasValidBban(sanitizedIban)
+        hasValidBbanChecksum: validationHelpers.hasValidBbanChecksum(sanitizedIban),
+        hasValidIbanChecksum: validationHelpers.hasValidIbanChecksum(sanitizedIban)
     }
     return validation;
 }

@@ -1,11 +1,8 @@
 const iban = require("./js/iban.js");
 const mysql = require("mysql");
 const express = require("express");
-const ejs = require("ejs");
 const path = require("path");
 const bodyParser = require("body-parser");
-const { body } = require('express-validator');
-const session = require("express-session");
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -15,7 +12,6 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.urlencoded({
 	extended: true
 }));
-app.use(session({ secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: true, cookie: { secure: true } }));
 
 const pool = mysql.createPool({
 	connectionLimit: 100,
@@ -27,13 +23,12 @@ const pool = mysql.createPool({
 });
 
 app.get("/", function (req, res) {
-	const validate = req.session.validate ? req.session.validate : null;
 	pool.query(`SELECT * FROM ${process.env.DATABASE_NAME}.bank_account ORDER BY id desc LIMIT 10`, function (err, result, fields) {
 		if (err) {
 			return res.json({ error: true, message: err });
 		}
 
-		res.render("index", { data: result, validate });
+		res.render("index", { data: result });
 	});
 });
 
@@ -48,10 +43,15 @@ app.get("/create", function (req, res) {
 	});
 });
 
+
+app.get("/validate", (req, res) => {
+	res.render("validate");
+});
+
 app.post("/validate", (req, res) => {
-	req.session.validate = iban.validate(req.body.iban);
-	console.log(req.session.validate);
-	res.redirect("/");
+	let validation = iban.validate(req.body.iban);
+	console.log(validation);
+	res.render("validate", { validation });
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
