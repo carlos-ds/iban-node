@@ -1,5 +1,5 @@
 const iban = require('./iban.js');
-const generatedIban = iban.generate();
+const generatedIban = iban.generateIban();
 const ibanRegEx = /^BE\d{2}(\s\d{4}){3}$/;
 
 test('iban is 19 characters (including spaces) long', () => {

@@ -14,7 +14,9 @@ function generateIban() {
     const randomNum = Math.random() * (9999999999 - 10000000 + 1);
     const lastDigits = (Math.floor(randomNum) + 10000000).toString();
     const firstTenDigits = ("0").repeat(10 - lastDigits.length).concat(lastDigits);
+    // console.log(firstTenDigits);
     const firstThreeDigits = firstTenDigits.substr(0, 3);
+    // console.log(firstThreeDigits);
 
     // Call the function again if the bank code generated is to be excluded (see bankcodes.js)
     if (bankCodes.toExclude.contains(firstThreeDigits)) {
@@ -22,7 +24,8 @@ function generateIban() {
     }
 
     // Add 2 BBAN check digits to the first ten digits, add the country code in latin alphabet, add "00" and perform modulo 97
-    const bbanString = bigInt(addBbanCheckDigits(firstTenDigits), 10).toString();
+    const bbanString = addBbanCheckDigits(firstTenDigits).toString();
+    // console.log(bbanString);
     const bbanWithCountryCodeAndZeroes = bigInt((bbanString + "111400"), 10);
     const checkMod97 = bbanWithCountryCodeAndZeroes % bigInt(97, 10);
 
@@ -32,7 +35,8 @@ function generateIban() {
 
     // Calculate IBAN check digits (BEXX ...) and add a zero if necessary
     const ibanCheckDigits = (bigInt(98, 10) - checkMod97).toString();
-    const checkDigitsWithLeadingZeroes = ("0").repeat(2 - ibanCheckDigits.toString().length) + ibanCheckDigits;
+    const checkDigitsWithLeadingZeroes = ("0").repeat(2 - ibanCheckDigits.length) + ibanCheckDigits;
+    // console.log(checkDigitsWithLeadingZeroes);
 
     // Return the IBAN number in BEXX XXXX XXXX XXXX format
     return `BE${checkDigitsWithLeadingZeroes} ${bbanString.substr(0, 4)} ${bbanString.substr(4, 4)} ${bbanString.substr(8, 4)}`;
