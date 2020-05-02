@@ -3,12 +3,12 @@ const bigInt = require("big-integer");
 
 // Helper function to add 2 check digits to a BBAN
 function addBbanCheckDigits(bban) {
-    let bbanInt = bigInt(bban);
-    let checkDigits = bbanInt % bigInt(97);
+    let bbanInt = bigInt(bban, 10);
+    let checkDigits = bbanInt % bigInt(97, 10);
 
-    if (bbanInt % bigInt(97) === 0) {
+    if (bbanInt % bigInt(97, 10) === 0) {
         return iban.generate();
-    } else if (bbanInt % bigInt(97) < 10) {
+    } else if (bbanInt % bigInt(97, 10) < 10) {
         // Return the result as a string with leading zero
         return bban + "0" + checkDigits;
     } else {
