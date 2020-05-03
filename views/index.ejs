@@ -2,10 +2,6 @@
 
 <div id="main">
     <div id="generate">
-        <p>Disclaimer: this app was made for testing purposes only.<br>It is purely based on the logic described on <a
-                href="https://nl.wikipedia.org/wiki/International_Bank_Account_Number" target="_blank">Wikipedia</a> to
-            generate a random Belgian bank account number in IBAN format. <br>The owner of the app can not be held
-            responsible for any misuse or errors.</p>
         <p>The last generated number on this site was:</p>
         <% if (data.length > 0) { %>
         <span id="iban"><%= data[0].value %></span>
@@ -25,6 +21,7 @@
             <% }); %>
         </ol>
         <% } %>
+        <p class="disclaimer"><i>Disclaimer: this app was made for testing purposes only.<br>It is purely based on the logic described on <a href="https://nl.wikipedia.org/wiki/International_Bank_Account_Number" target="_blank">Wikipedia</a> to generate a random Belgian bank account number in IBAN format.<br>The owner of the app can not be held responsible for any misuse or errors.<br>The source code of this app can be found on <a href="https://github.com/carlos-ds/iban-node" target="_blank">Github</a>.</i></p>
     </div>
 </div>
 
