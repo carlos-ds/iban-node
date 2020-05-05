@@ -1,0 +1,14 @@
+name: Trigger test run with Jest
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  test:
+    name: Jest
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Test with Jest
+      - run: npm test
