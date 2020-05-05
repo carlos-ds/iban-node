@@ -10,6 +10,6 @@ jobs:
     name: Jest
     runs-on: ubuntu-latest
     steps: 
-      - name: Test with Jest
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+      - name: Test with Jest       
         run: npm test
