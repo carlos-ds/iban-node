@@ -1,0 +1,33 @@
+<% include ./partials/header.ejs %>
+
+<div id="main">
+    <div id="validate" style="padding-bottom: 50px;">
+        <p>Validate a Belgian bank account number. The number must be in "BEXX XXXX XXXX XXXX" format to pass the tests.
+        </p>
+        <form action="/validate" method="POST" name="validate" autocomplete="off">
+            <input type="text" name="iban" placeholder="BEXX XXXX XXXX XXXX">
+            <input class="button primary" type="submit" value="Submit"></input>
+        </form>
+    </div>
+    <% if (locals.validation) { %>
+    <div id="validation-result">
+        <h2>Result</h2>
+        <p><%- validation.iban %></p>
+        <ul>
+            <li data-valid="<%- validation.has16Characters %>">The account number should have 16 characters (excluding
+                whitespace).
+            </li>
+            <li data-valid="<%- validation.startsWithBelgianPrefix %>">The account number should start with "BE".</li>
+            <li data-valid="<%- validation.endsWithNumbers %>">The account number should end with 14 numbers.</li>
+            <li data-valid="<%- validation.hasValidBbanChecksum %>">The account number should have a valid BBAN
+                checksum.
+            </li>
+            <li data-valid="<%- validation.hasValidIbanChecksum %>">The account number should have a valid IBAN
+                checksum.</li>
+        </ul>
+    </div>
+    <% } %>
+    <p class="disclaimer"><i>Disclaimer: this app was made for testing purposes only.<br>It is purely based on the logic described on <a href="https://nl.wikipedia.org/wiki/International_Bank_Account_Number" target="_blank">Wikipedia</a> to generate a random Belgian bank account number in IBAN format.<br>The owner of the app can not be held responsible for any misuse or errors.<br>The source code of this app can be found on <a href="https://github.com/carlos-ds/iban-node" target="_blank">Github</a>.</i></p>
+</div>
+
+<% include ./partials/footer.ejs %>
