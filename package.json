@@ -18,6 +18,7 @@
 		"jest": "^24.9.0"
 	},
 	"scripts": {
+		"design": "browser-sync start --server --files 'design/*'",
 		"start": "node index.js",
 		"start_dev": "env-cmd -f ./config/dev.env nodemon index.js",
 		"test": "jest"
