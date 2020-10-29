@@ -1,16 +1,30 @@
+require("dotenv").config();
+
 const iban = require("./js/iban.js");
 const mysql = require("mysql");
 const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
 const app = express();
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 3306;
+const environment = process.env.NODE_ENV || "dev";
 
 app.use(
   bodyParser.urlencoded({
     extended: true,
   })
 );
+
+if (environment === "dev") {
+  app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "http://localhost:4200");
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept"
+    );
+    next();
+  });
+}
 
 const pool = mysql.createPool({
   connectionLimit: 100,
@@ -22,7 +36,6 @@ const pool = mysql.createPool({
 });
 
 app.get("/", function (req, res) {
-  console.log(req);
   pool.query(
     `SELECT * FROM ${process.env.DATABASE_NAME}.bank_account ORDER BY id desc LIMIT 5`,
     function (err, result, fields) {
@@ -60,4 +73,6 @@ app.post("/validate", (req, res) => {
   }
 });
 
-app.listen(port, () => console.log(`App listening on port ${port}!`));
+app.listen(port, () =>
+  console.log(`Port: ${port}\nEnvironment: ${environment}`)
+);
