@@ -6,16 +6,6 @@ const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
 const app = express();
-<<<<<<< HEAD
-const port = process.env.PORT || 3000;
-
-app.set("view engine", "ejs");
-
-app.use(express.static(path.join(__dirname, "public")));
-app.use(bodyParser.urlencoded({
-	extended: true
-}));
-=======
 const port = process.env.PORT || 3306;
 const environment = process.env.NODE_ENV || "dev";
 
@@ -34,52 +24,17 @@ app.use(function (req, res, next) {
   );
   next();
 });
->>>>>>> develop
 
 const pool = mysql.createPool({
-	connectionLimit: 100,
-	host: process.env.DATABASE_HOSTNAME,
-	user: process.env.DATABASE_USERNAME,
-	password: process.env.DATABASE_PASSWORD,
-	database: process.env.DATABASE_NAME,
-	debug: false
+  connectionLimit: 100,
+  host: process.env.DATABASE_HOSTNAME,
+  user: process.env.DATABASE_USERNAME,
+  password: process.env.DATABASE_PASSWORD,
+  database: process.env.DATABASE_NAME,
+  debug: false,
 });
 
 app.get("/", function (req, res) {
-<<<<<<< HEAD
-	pool.query(`SELECT * FROM ${process.env.DATABASE_NAME}.bank_account ORDER BY id desc LIMIT 10`, function (err, result, fields) {
-		if (err) {
-			return res.json({ error: true, message: err });
-		}
-
-		res.render("index", { data: result });
-	});
-});
-
-app.get("/create", function (req, res) {
-	let newIban = iban.generateIban();
-	pool.query(`INSERT INTO ${process.env.DATABASE_NAME}.bank_account (value, format, country) VALUES (?, ?, ?)`, [newIban, "IBAN", "BE"], function (err, result, fields) {
-		if (err) {
-			return res.json({ error: true, message: err });
-		}
-
-		res.redirect("/");
-	});
-});
-
-
-app.get("/validate", (req, res) => {
-	res.render("validate");
-});
-
-app.post("/validate", (req, res) => {
-	let validation = iban.validate(req.body.iban);
-	console.log(validation);
-	res.render("validate", { validation });
-});
-
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
-=======
   let limit = parseInt(req.query.limit, 10);
 
   if (!limit || limit <= 0) {
@@ -126,4 +81,3 @@ app.post("/validate", (req, res) => {
 app.listen(port, () =>
   console.log(`Port: ${port}\nEnvironment: ${environment}`)
 );
->>>>>>> develop
