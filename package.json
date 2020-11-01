@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
 	"name": "iban-node",
 	"version": "1.0.0",
 	"description": "",
@@ -30,4 +31,36 @@
 			"BigInt": true
 		}
 	}
+=======
+  "name": "iban-node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "big-integer": "^1.6.48",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "express-validator": "^6.6.1",
+    "mysql": "^2.18.1"
+  },
+  "devDependencies": {
+    "jest": "^24.9.0"
+  },
+  "scripts": {
+    "design": "browser-sync start --server --files 'design/*'",
+    "start": "node index.js",
+    "start_dev": "nodemon index.js",
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "eslintConfig": {
+    "globals": {
+      "BigInt": true
+    }
+  }
+>>>>>>> develop
 }

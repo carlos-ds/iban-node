@@ -1,3 +1,9 @@
 node_modules
 config
+<<<<<<< HEAD
 .prettierignore
+=======
+.prettierignore
+design/
+.env
+>>>>>>> develop
