@@ -14,17 +14,16 @@ app.use(
     extended: true,
   })
 );
+app.use(express.json());
 
-if (environment === "dev") {
-  app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "http://localhost:4200");
-    res.header(
-      "Access-Control-Allow-Headers",
-      "Origin, X-Requested-With, Content-Type, Accept"
-    );
-    next();
-  });
-}
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", process.env.APPLICATION_URL);
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
 
 const pool = mysql.createPool({
   connectionLimit: 100,
@@ -36,8 +35,14 @@ const pool = mysql.createPool({
 });
 
 app.get("/", function (req, res) {
+  let limit = parseInt(req.query.limit, 10);
+
+  if (!limit || limit <= 0) {
+    limit = 1;
+  }
+
   pool.query(
-    `SELECT * FROM ${process.env.DATABASE_NAME}.bank_account ORDER BY id desc LIMIT 5`,
+    `SELECT * FROM ${process.env.DATABASE_NAME}.bank_account ORDER BY id desc LIMIT ${limit}`,
     function (err, result, fields) {
       if (err) {
         return res.status(500).send(err);
@@ -58,14 +63,14 @@ app.get("/create", function (req, res) {
         return res.status(500).send(err);
       }
 
-      return res.status(200).json(result);
+      return res.redirect("/?limit=5");
     }
   );
 });
 
 app.post("/validate", (req, res) => {
   try {
-    let validation = iban.validate(req.body.iban);
+    let validation = iban.validate(req.body.accountNumber);
     return res.status(200).json(validation);
   } catch (err) {
     console.log(err);
