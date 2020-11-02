@@ -53,7 +53,7 @@ function hasValidIbanChecksum(iban) {
   }
 
   const bban = iban.substring(4, 16);
-  const bbanWithCountryCodeAndZeroes = BigInt(parseInt(bban + "111400", 10));
+  const bbanWithCountryCodeAndZeroes = bban + "111400";
 
   const n1 = BigInt(parseInt(bbanWithCountryCodeAndZeroes.substring(0, 9), 10));
   const mod1 = n1 % BigInt(97);
@@ -71,7 +71,7 @@ function hasValidIbanChecksum(iban) {
   );
   const mod3 = n3 % BigInt(97);
 
-  if (mod3 === 1) {
+  if ((BigInt(98) - mod3).toString() === iban.substring(2, 4)) {
     return true;
   } else {
     return false;
