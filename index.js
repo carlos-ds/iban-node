@@ -9,21 +9,18 @@ const app = express();
 const port = process.env.PORT || 3306;
 const environment = process.env.NODE_ENV || "dev";
 
-app.use(
-  bodyParser.urlencoded({
-    extended: true,
-  })
-);
-app.use(express.json());
-
 app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", process.env.APPLICATION_URL);
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST");
+  res.setHeader("Access-Control-Allow-Origin", process.env.APPLICATION_URL);
+  res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.setHeader("Vary", "Origin");
   next();
 });
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+
+// From the official Express documentation: "If you don’t want to use Helmet, then at least disable the X-Powered-By header. Attackers can use this header (which is enabled by default) to detect apps running Express and then launch specifically-targeted attacks."
+app.disable("x-powered-by");
 
 const pool = mysql.createPool({
   connectionLimit: 100,
@@ -34,38 +31,31 @@ const pool = mysql.createPool({
   debug: false,
 });
 
-app.get("/", function (req, res) {
+app.get("/", function (req, res, next) {
   let limit = parseInt(req.query.limit, 10);
 
   if (!limit || limit <= 0) {
     limit = 1;
   }
 
-  pool.query(
-    `SELECT * FROM ${process.env.DATABASE_NAME}.bank_account ORDER BY id desc LIMIT ${limit}`,
-    function (err, result, fields) {
-      if (err) {
-        return res.status(500).send(err);
-      }
-
-      return res.status(200).json(result);
+  pool.query(`SELECT * FROM ${process.env.DATABASE_NAME}.bank_account ORDER BY id desc LIMIT ${limit}`, function (err, result, fields) {
+    if (err) {
+      return res.status(500).send(err);
     }
-  );
+
+    return res.status(200).json(result);
+  });
 });
 
 app.get("/create", function (req, res) {
   let newIban = iban.generateIban();
-  pool.query(
-    `INSERT INTO ${process.env.DATABASE_NAME}.bank_account (value, format, country) VALUES (?, ?, ?)`,
-    [newIban, "IBAN", "BE"],
-    function (err, result, fields) {
-      if (err) {
-        return res.status(500).send(err);
-      }
-
-      return res.redirect("/?limit=5");
+  pool.query(`INSERT INTO ${process.env.DATABASE_NAME}.bank_account (value, format, country) VALUES (?, ?, ?)`, [newIban, "IBAN", "BE"], function (err, result, fields) {
+    if (err) {
+      return res.status(500).send(err);
     }
-  );
+
+    return res.redirect("/?limit=5");
+  });
 });
 
 app.post("/validate", (req, res) => {
@@ -78,6 +68,4 @@ app.post("/validate", (req, res) => {
   }
 });
 
-app.listen(port, () =>
-  console.log(`Port: ${port}\nEnvironment: ${environment}`)
-);
+app.listen(port, () => console.log(`Port: ${port}\nEnvironment: ${environment}`));
