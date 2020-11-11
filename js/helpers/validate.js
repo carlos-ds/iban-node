@@ -1,5 +1,9 @@
 const bankCodes = require("./bankcodes");
 
+function sanitizeIban(iban) {
+  return iban.trim().replace(/\s/g, "");
+}
+
 function has16Characters(iban) {
   if (iban.length === 16) {
     return true;
@@ -58,17 +62,10 @@ function hasValidIbanChecksum(iban) {
   const n1 = BigInt(parseInt(bbanWithCountryCodeAndZeroes.substring(0, 9), 10));
   const mod1 = n1 % BigInt(97);
 
-  const n2 = BigInt(
-    parseInt(
-      mod1.toString() + bbanWithCountryCodeAndZeroes.substring(9, 16),
-      10
-    )
-  );
+  const n2 = BigInt(parseInt(mod1.toString() + bbanWithCountryCodeAndZeroes.substring(9, 16), 10));
   const mod2 = n2 % BigInt(97);
 
-  const n3 = BigInt(
-    parseInt(mod2.toString() + bbanWithCountryCodeAndZeroes.substring(16, 18))
-  );
+  const n3 = BigInt(parseInt(mod2.toString() + bbanWithCountryCodeAndZeroes.substring(16, 18)));
   const mod3 = n3 % BigInt(97);
 
   if ((BigInt(98) - mod3).toString() === iban.substring(2, 4)) {
@@ -79,6 +76,7 @@ function hasValidIbanChecksum(iban) {
 }
 
 module.exports = {
+  sanitizeIban,
   has16Characters,
   startsWithBelgianPrefix,
   endsWithNumbers,
