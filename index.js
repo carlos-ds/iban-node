@@ -3,7 +3,6 @@ require("dotenv").config();
 const iban = require("./js/iban.js");
 const mysql = require("mysql");
 const express = require("express");
-const path = require("path");
 const bodyParser = require("body-parser");
 const app = express();
 const port = process.env.PORT || 3306;
