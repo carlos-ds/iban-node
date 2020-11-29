@@ -10,7 +10,11 @@ const environment = process.env.NODE_ENV || "dev";
 
 app.use(function (req, res, next) {
   res.setHeader("Access-Control-Allow-Methods", "GET, POST");
-  res.setHeader("Access-Control-Allow-Origin", process.env.APPLICATION_URL);
+  if (environment === "dev") {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+  } else {
+    res.setHeader("Access-Control-Allow-Origin", process.env.APPLICATION_URL);
+  }
   res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   res.setHeader("Vary", "Origin");
   next();
