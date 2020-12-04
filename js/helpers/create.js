@@ -1,20 +1,19 @@
 const iban = require("../iban.js");
-const bigInt = require("big-integer");
 
 // Helper function to add 2 check digits to a BBAN
 function addBbanCheckDigits(bban) {
-    let bbanInt = bigInt(bban, 10);
-    let checkDigits = bbanInt % bigInt(97, 10);
+  let bbanInt = BigInt(bban, 10);
+  let checkDigits = bbanInt % BigInt(97, 10);
 
-    if (checkDigits === bigInt(0, 10)) {
-        return iban.generate();
-    } else if (checkDigits < bigInt(10, 10)) {
-        // Return the result as a string with leading zero
-        return bban + "0" + checkDigits;
-    } else {
-        // Return the result as a string
-        return bban + checkDigits;
-    }
+  if (checkDigits === BigInt(0, 10)) {
+    return iban.generate();
+  } else if (checkDigits < BigInt(10, 10)) {
+    // Return the result as a string with leading zero
+    return bban + "0" + checkDigits;
+  } else {
+    // Return the result as a string
+    return bban + checkDigits;
+  }
 }
 
 module.exports = { addBbanCheckDigits };

@@ -1,7 +1,6 @@
 const addBbanCheckDigits = require("./helpers/create").addBbanCheckDigits;
 const validationHelpers = require("./helpers/validate");
 const bankCodes = require("./helpers/bankcodes");
-const bigInt = require("big-integer");
 
 // Extend array with contain method to exclude free/invalid bank codes
 // https://stackoverflow.com/questions/12623272/how-to-check-if-a-string-array-contains-one-string-in-javascript
@@ -23,15 +22,15 @@ function generateIban() {
 
   // Add 2 BBAN check digits to the first ten digits, add the country code in latin alphabet, add "00" and perform modulo 97
   const bbanString = addBbanCheckDigits(firstTenDigits).toString();
-  const bbanWithCountryCodeAndZeroes = bigInt(bbanString + "111400", 10);
-  const checkMod97 = bbanWithCountryCodeAndZeroes % bigInt(97, 10);
+  const bbanWithCountryCodeAndZeroes = BigInt(bbanString + "111400", 10);
+  const checkMod97 = bbanWithCountryCodeAndZeroes % BigInt(97, 10);
 
   if (checkMod97 === 0) {
     return generateIban();
   }
 
   // Calculate IBAN check digits (BEXX ...) and add a zero if necessary
-  const ibanCheckDigits = (bigInt(98, 10) - checkMod97).toString();
+  const ibanCheckDigits = (BigInt(98, 10) - checkMod97).toString();
   const checkDigitsWithLeadingZeroes = "0".repeat(2 - ibanCheckDigits.length) + ibanCheckDigits;
 
   // Return the IBAN number in BEXX XXXX XXXX XXXX format
