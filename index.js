@@ -11,15 +11,13 @@ const environment = process.env.NODE_ENV || "dev";
 
 app.use(function (req, res, next) {
   console.log(req.hostname);
+  console.log(req.protocol);
+  console.log(config.allowedOrigins);
   res.setHeader("Access-Control-Allow-Methods", "GET, POST");
   if (environment === "dev") {
     res.setHeader("Access-Control-Allow-Origin", "*");
   } else {
-    if (config.allowedOrigins.includes(req.hostname)) {
-      res.setHeader("Access-Control-Allow-Origin", `${req.protocol}://${req.hostname}`);
-    } else {
-      res.status(403).error(`The originating domain ${req.hostname} is not recognized.`);
-    }
+    res.setHeader("Access-Control-Allow-Origin", "https://iban-angular.herokuapp.com/");
   }
   res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   res.setHeader("Vary", "Origin");
