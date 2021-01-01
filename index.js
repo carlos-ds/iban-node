@@ -10,14 +10,15 @@ const port = process.env.PORT || 3306;
 const environment = process.env.NODE_ENV || "dev";
 
 app.use(function (req, res, next) {
+  console.log(req.hostname);
   res.setHeader("Access-Control-Allow-Methods", "GET, POST");
   if (environment === "dev") {
     res.setHeader("Access-Control-Allow-Origin", "*");
   } else {
-    if (config.allowedOrigins.includes(req.url.origin)) {
-      res.setHeader("Access-Control-Allow-Origin", req.url.origin);
+    if (config.allowedOrigins.includes(req.hostname)) {
+      res.setHeader("Access-Control-Allow-Origin", `${req.protocol}://${req.hostname}`);
     } else {
-      res.status(403).send(`The originating domain ${req.url.origin} is not recognized.`);
+      res.status(403).error(`The originating domain ${req.hostname} is not recognized.`);
     }
   }
   res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
