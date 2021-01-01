@@ -17,7 +17,7 @@ app.use(function (req, res, next) {
   if (environment === "dev") {
     res.setHeader("Access-Control-Allow-Origin", "*");
   } else {
-    res.setHeader("Access-Control-Allow-Origin", "https://iban-angular.herokuapp.com/");
+    res.setHeader("Access-Control-Allow-Origin", "https://iban-angular.herokuapp.com");
   }
   res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   res.setHeader("Vary", "Origin");
