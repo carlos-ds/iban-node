@@ -14,6 +14,7 @@ app.use(function (req, res, next) {
     res.setHeader("Access-Control-Allow-Origin", "*");
   } else {
     res.setHeader("Access-Control-Allow-Origin", process.env.APPLICATION_URL);
+    res.setHeader("Access-Control-Allow-Origin", process.env.HEROKU_APPLICATION_URL);
   }
   res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   res.setHeader("Vary", "Origin");
