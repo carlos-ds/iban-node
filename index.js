@@ -5,6 +5,7 @@ const mysql = require("mysql");
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
+const config = require("./config");
 const port = process.env.PORT || 3306;
 const environment = process.env.NODE_ENV || "dev";
 
@@ -13,8 +14,11 @@ app.use(function (req, res, next) {
   if (environment === "dev") {
     res.setHeader("Access-Control-Allow-Origin", "*");
   } else {
-    res.setHeader("Access-Control-Allow-Origin", process.env.APPLICATION_URL);
-    res.setHeader("Access-Control-Allow-Origin", process.env.HEROKU_APPLICATION_URL);
+    if (config.allowedOrigins.includes(req.url.origin)) {
+      res.setHeader("Access-Control-Allow-Origin", req.url.origin);
+    } else {
+      res.status(403).send(`The originating domain ${req.url.origin} is not recognized.`);
+    }
   }
   res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   res.setHeader("Vary", "Origin");
