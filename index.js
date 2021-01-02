@@ -5,7 +5,7 @@ const mysql = require("mysql");
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
-const config = require("./config");
+const config = require("./config.js");
 const port = process.env.PORT || 3306;
 const environment = process.env.NODE_ENV || "dev";
 
@@ -18,7 +18,7 @@ app.use(function (req, res, next) {
     if (config.allowedOrigins.includes(req.hostname)) {
       res.setHeader("Access-Control-Allow-Origin", `${req.protocol}://${req.hostname}`);
     } else {
-      res.status(403).error(`The originating domain ${req.hostname} is not recognized.`);
+      res.setHeader("Access-Control-Allow-Origin", "https://iban-generator.be");
     }
   }
   res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
