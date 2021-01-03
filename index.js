@@ -5,19 +5,20 @@ const mysql = require("mysql");
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
-const config = require("./config");
+const config = require("./config.js");
 const port = process.env.PORT || 3306;
 const environment = process.env.NODE_ENV || "dev";
 
 app.use(function (req, res, next) {
-  console.log(req.hostname);
-  console.log(req.protocol);
-  console.log(config.allowedOrigins);
   res.setHeader("Access-Control-Allow-Methods", "GET, POST");
   if (environment === "dev") {
     res.setHeader("Access-Control-Allow-Origin", "*");
   } else {
-    res.setHeader("Access-Control-Allow-Origin", "https://iban-angular.herokuapp.com");
+    if (config.allowedOrigins.includes(req.headers.origin)) {
+      res.setHeader("Access-Control-Allow-Origin", req.headers.origin);
+    } else {
+      res.setHeader("Access-Control-Allow-Origin", "https://iban-generator.be");
+    }
   }
   res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   res.setHeader("Vary", "Origin");
