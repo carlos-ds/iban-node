@@ -1,3 +1,3 @@
-const allowedOrigins = ["iban-generator.be", "iban-node.herokuapp.com", "iban-angular.herokuapp.com"];
+const allowedOrigins = ["https://iban-generator.be", "https://www.iban-generator.be", "https://iban-angular.herokuapp.com", "https://www.iban-angular.herokuapp.com"];
 
 module.exports = { allowedOrigins };

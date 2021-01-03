@@ -10,13 +10,14 @@ const port = process.env.PORT || 3306;
 const environment = process.env.NODE_ENV || "dev";
 
 app.use(function (req, res, next) {
+  console.log(req.headers.origin);
   console.log(req.hostname);
   res.setHeader("Access-Control-Allow-Methods", "GET, POST");
   if (environment === "dev") {
     res.setHeader("Access-Control-Allow-Origin", "*");
   } else {
-    if (config.allowedOrigins.includes(req.hostname)) {
-      res.setHeader("Access-Control-Allow-Origin", `${req.protocol}://${req.hostname}`);
+    if (config.allowedOrigins.includes(req.headers.origin)) {
+      res.setHeader("Access-Control-Allow-Origin", req.headers.origin);
     } else {
       res.setHeader("Access-Control-Allow-Origin", "https://iban-generator.be");
     }
