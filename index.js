@@ -8,6 +8,26 @@ const config = require("./config.js");
 const port = process.env.PORT || 3306;
 const environment = process.env.NODE_ENV || "dev";
 
+app.use(function (req, res, next) {
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST");
+  if (environment === "dev") {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+  } else {
+    if (config.allowedOrigins.includes(req.headers.origin)) {
+      res.setHeader("Access-Control-Allow-Origin", req.headers.origin);
+    } else {
+      res.setHeader("Access-Control-Allow-Origin", "https://iban-generator.be");
+    }
+  }
+  res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.setHeader("Vary", "Origin");
+  next();
+});
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+// From the official Express documentation: "If you don’t want to use Helmet, then at least disable the X-Powered-By header. Attackers can use this header (which is enabled by default) to detect apps running Express and then launch specifically-targeted attacks."
+app.disable("x-powered-by");
+
 // MongoDB connection
 const MongoClient = require("mongodb").MongoClient;
 const username = encodeURIComponent(process.env.DATABASE_USERNAME);
@@ -16,26 +36,6 @@ const uri = `mongodb+srv://${username}:${password}@${process.env.DATABASE_HOSTNA
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 client.connect().then(() => {
-  app.use(function (req, res, next) {
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST");
-    if (environment === "dev") {
-      res.setHeader("Access-Control-Allow-Origin", "*");
-    } else {
-      if (config.allowedOrigins.includes(req.headers.origin)) {
-        res.setHeader("Access-Control-Allow-Origin", req.headers.origin);
-      } else {
-        res.setHeader("Access-Control-Allow-Origin", "https://iban-generator.be");
-      }
-    }
-    res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    res.setHeader("Vary", "Origin");
-    next();
-  });
-  app.use(bodyParser.urlencoded({ extended: true }));
-  app.use(express.json());
-  // From the official Express documentation: "If you don’t want to use Helmet, then at least disable the X-Powered-By header. Attackers can use this header (which is enabled by default) to detect apps running Express and then launch specifically-targeted attacks."
-  app.disable("x-powered-by");
-
   app.get("/", async function (req, res, next) {
     try {
       let limit = parseInt(req.query.limit, 10);
