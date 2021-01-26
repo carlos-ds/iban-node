@@ -68,7 +68,7 @@ function hasValidIbanChecksum(iban) {
   const n3 = BigInt(parseInt(mod2.toString() + bbanWithCountryCodeAndZeroes.substring(16, 18)));
   const mod3 = n3 % BigInt(97);
 
-  if ((BigInt(98) - mod3).toString() === iban.substring(2, 4)) {
+  if (BigInt(98) - mod3 === BigInt(parseInt(iban.substring(2, 4), 10))) {
     return true;
   } else {
     return false;
