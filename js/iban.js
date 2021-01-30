@@ -42,6 +42,7 @@ function validate(iban) {
   let formattedIban = `${sanitizedIban.substring(0, 4)} ${sanitizedIban.substring(4, 8)} ${sanitizedIban.substring(8, 12)} ${sanitizedIban.substring(12, 16)}`;
   let validation = {
     iban: formattedIban,
+    sanitizedIban: sanitizedIban,
     has16Characters: validationHelpers.has16Characters(sanitizedIban),
     startsWithBelgianPrefix: validationHelpers.startsWithBelgianPrefix(sanitizedIban),
     endsWithNumbers: validationHelpers.endsWithNumbers(sanitizedIban),

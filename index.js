@@ -69,7 +69,7 @@ client
         const document = {
           accountNumber: accountNumber,
           createdAt: new Date().toISOString(),
-          createdBy: "GENERATE",
+          createdBy: "GENERATION",
         };
         const result = await collection.insertOne(document);
 
@@ -85,15 +85,18 @@ client
       try {
         const validation = iban.validate(req.body.accountNumber);
 
-        const collection = client.db(process.env.DATABASE_NAME).collection("iban");
-        const document = {
-          accountNumber: validation.iban,
-          createdAt: new Date().toISOString(),
-          createdBy: "VALIDATION",
-        };
-        const result = await collection.insertOne(document);
+        if (validation.sanitizedIban.length >= 16) {
+          const collection = client.db(process.env.DATABASE_NAME).collection("iban");
+          const document = {
+            accountNumber: validation.iban,
+            createdAt: new Date().toISOString(),
+            createdBy: "VALIDATION",
+            validationResult: validation,
+          };
+          const result = await collection.insertOne(document);
 
-        console.log(`#documents inserted: ${result.insertedCount}`);
+          console.log(`# documents inserted: ${result.insertedCount}`);
+        }
 
         return res.status(200).json(validation);
       } catch (err) {
