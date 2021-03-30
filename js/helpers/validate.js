@@ -1,7 +1,7 @@
-const bankCodes = require("./bankcodes");
+const bankCodes = require('./bankcodes');
 
 function sanitizeIban(iban) {
-  return iban.trim().replace(/\s/g, "");
+  return iban.trim().replace(/\s/g, '');
 }
 
 function has16Characters(iban) {
@@ -13,7 +13,7 @@ function has16Characters(iban) {
 }
 
 function startsWithBelgianPrefix(iban) {
-  if (iban.substring(0, 2) === "BE") {
+  if (iban.substring(0, 2) === 'BE') {
     return true;
   } else {
     return false;
@@ -22,7 +22,7 @@ function startsWithBelgianPrefix(iban) {
 
 function endsWithNumbers(iban) {
   let onlyNumbers = /^\d+$/;
-  return onlyNumbers.test(iban.substring(2, 16));
+  return onlyNumbers.test(iban.substring(2, iban.length));
 }
 
 function hasValidBbanChecksum(iban) {
@@ -57,7 +57,7 @@ function hasValidIbanChecksum(iban) {
   }
 
   const bban = iban.substring(4, 16);
-  const bbanWithCountryCodeAndZeroes = bban + "111400";
+  const bbanWithCountryCodeAndZeroes = bban + '111400';
 
   const n1 = BigInt(parseInt(bbanWithCountryCodeAndZeroes.substring(0, 9), 10));
   const mod1 = n1 % BigInt(97);
