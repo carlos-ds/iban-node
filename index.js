@@ -38,7 +38,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 client
   .connect()
   .then(() => {
-    app.get('/', async function (req, res, next) {
+    app.get('/', async function (req, res) {
       try {
         let limit = parseInt(req.query.limit, 10);
         let createdBy = req.query.createdBy;
@@ -52,7 +52,8 @@ client
         }
 
         const collection = client.db(process.env.DATABASE_NAME).collection('iban');
-        const result = collection
+
+        collection
           .find({ createdBy: createdBy })
           .sort({ createdAt: -1 })
           .limit(limit)
@@ -67,14 +68,17 @@ client
       }
     });
 
-    app.get('/create', async function (req, res) {
+    app.post('/create', async function (req, res) {
       try {
-        let accountNumber = iban.generateIban();
+        const accountNumber = iban.generateIban();
         const collection = client.db(process.env.DATABASE_NAME).collection('iban');
+
+        const userId = req.body.userId;
         const document = {
-          accountNumber: accountNumber,
+          accountNumber,
           createdAt: new Date().toISOString(),
           createdBy: 'GENERATION',
+          userId
         };
         const result = await collection.insertOne(document);
 
@@ -88,22 +92,24 @@ client
 
     app.post('/validate', async function (req, res) {
       try {
-        const validation = iban.validate(req.body.accountNumber);
+        const validationResult = iban.validate(req.body.accountNumber);
+        const userId = req.body.userId;
 
-        if (validation.sanitizedIban.length >= 16) {
+        if (validationResult.sanitizedIban.length >= 16) {
           const collection = client.db(process.env.DATABASE_NAME).collection('iban');
           const document = {
-            accountNumber: validation.iban,
+            accountNumber: validationResult.iban,
             createdAt: new Date().toISOString(),
             createdBy: 'VALIDATION',
-            validationResult: validation,
+            validationResult,
+            userId
           };
           const result = await collection.insertOne(document);
 
           console.log(`# documents inserted: ${result.insertedCount}`);
         }
 
-        return res.status(200).json(validation);
+        return res.status(200).json(validationResult);
       } catch (err) {
         console.log(err);
         return res.status(500).send(err);
